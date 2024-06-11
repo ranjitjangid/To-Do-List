@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List Operations</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        #todoInputedit, #edit{
+            display: none;
+        }
+        .custom-border {
+            border: 1px solid #ccc;
+            margin-top: 1rem;
+            width: 100%;
+        }
+        tr,td,th{
+            border: 1px solid #ccc;
+            padding:.5rem 1rem;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-200 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded shadow-md w-96">
+        <h1 class="text-2xl font-bold mb-4">To-Do List</h1>
+        <form id="todoForm" class="mb-4">
+            <input id="todoInput" type="text" class="w-full px-4 py-2 border rounded-md" placeholder="Enter your to-do item">
+            <input id="todoInputedit"  type="text" class="w-full px-4 py-2 border rounded-md" placeholder="Enter a new work">
+            <button id="edit" onclick="sendItem()"   class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Edit</button>
+            <div id="listContainer"></div>
+        </form>
+        <div class="flex flex-col gap-2">
+            <button id="addbtn"  onclick="addItem()" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Add Item</button>
+            <button id="removeBtn" onclick="removeItem()" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Remove Item</button>
+            <button id="editBtn" onclick="editItem()" class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">Edit Item</button>
+            <button id="viewBtn" onclick="viewList()" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">View List</button>
+            <button id="exitBtn" onclick="exit()" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">Exit</button>
+        </div>
+    
+    </div>
+     <script>
+      var list = JSON.parse(localStorage.getItem('list')) || [];
+        
+        function addItem() {
+   
+            let input = document.getElementById('todoInput').value;
+            list.push(input);
+            localStorage.setItem('list', JSON.stringify(list));
+            alert('Item Added Successfully');
+        }
+        
+        function removeItem() {
+            let input = document.getElementById('todoInput').value;
+            let indexRemove = list.indexOf(input);
+            if (indexRemove !== -1) {
+                list.splice(indexRemove, 1);
+              alert('Item removed successfully');
+            } else {
+                alert('Item Not Found');
+            }
+        }
+        
+    
+        function editItem() {
+           
+            let editInput = document.getElementById('todoInputedit');
+            let edit = document.getElementById('edit');
+            editInput.style.display ='block';
+           edit.style.display ='block';
+          
+        }
+          function sendItem() {
+            let input = document.getElementById('todoInput').value;
+            let editInput = document.getElementById('todoInputedit').value;
+            let indexRemove = list.indexOf(input);
+            if (indexRemove !== -1) {
+                 
+                    list[indexRemove] = editInput;
+                    localStorage.setItem('list', JSON.stringify(list));
+                    alert('Item Edited Successfully')
+            } else {
+               alert('Item not found.');
+            }
+          }
+          function viewList() {
+           
+            let table = '<table border="1" class="custom-border">';
+            table += '<tr><th>Index</th><th>Item</th></tr>';
+            for (let i = 0; i < list.length; i++) {
+                table += '<tr>';
+                table += '<td>' + i + '</td>';
+                table += '<td>' + list[i] + '</td>';
+                table += '</tr>';
+            }
+            table += '</table>';
+           
+           document.getElementById('listContainer').innerHTML = table;
+         document.getElementById('listContainer').style.display = 'block';
+        }
+      
+     function exit() {
+        let exit = document.getElementById('listContainer');
+       let exitAlert = confirm('Do You Want To Exit?');
+       if (exitAlert == true) {
+        exit.style.display = 'none';
+       }
+
+     }
+     
+       
+      
+
+   
+     </script>
+</body>
+</html>
